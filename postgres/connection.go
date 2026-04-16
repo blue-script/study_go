@@ -2,10 +2,18 @@ package postgres
 
 import (
 	"context"
+	"fmt"
+	"os"
 
 	"github.com/jackc/pgx/v5"
 )
 
 func CreateConnection(ctx context.Context) (*pgx.Conn, error) {
-	return pgx.Connect(ctx, "postgres://postgres:1234@localhost:5432/postgres")
+	postgres_connect := os.Getenv("postgres_connect")
+	if postgres_connect == "" {
+		fmt.Println("Can't connect")
+	} else {
+		fmt.Println("Success connect")
+	}
+	return pgx.Connect(ctx, postgres_connect)
 }
