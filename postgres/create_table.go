@@ -8,15 +8,10 @@ import (
 
 func CreateTable(ctx context.Context, con *pgx.Conn) error {
 	sqlQuery := `
-	CREATE TABLE IF NOT EXISTS books(
+	CREATE TABLE IF NOT EXISTS users(
 		id SERIAL PRIMARY KEY,
-		title VARCHAR(100) NOT NULL,
-		author VARCHAR(60) NOT NULL,
-		review TEXT,
-		release_year INTEGER NOT NULL,
-		is_read BOOLEAN NOT NULL DEFAULT FALSE,
-		added_at TIMESTAMP NOT NULL,
-		completed_at TIMESTAMP 
+		full_name VARCHAR(100) NOT NULL,
+		phone_number VARCHAR(60)
 	)
 	`
 

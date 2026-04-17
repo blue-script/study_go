@@ -13,6 +13,6 @@ func UpdateTask(ctx context.Context, con *pgx.Conn, book BookModel) error {
 		WHERE id=$8
 	`
 
-	_, err := con.Exec(ctx, sqlQuery, book.Title, book.Author, book.Review, book.ReleaseYear, book.IsRead, book.AddedAt, book.CompletedAt, book.Id)
+	_, err := con.Exec(ctx, sqlQuery, book.Title, book.Author, book.Review, book.ReleaseYear, book.IsRead, book.AddedAt, book.CompletedAt, book.ID)
 	return err
 }

@@ -26,7 +26,7 @@ func SelectRows(ctx context.Context, con *pgx.Conn) ([]BookModel, error) {
 		var book BookModel
 
 		err := rows.Scan(
-			&book.Id,
+			&book.ID,
 			&book.Title,
 			&book.Author,
 			&book.Review,
