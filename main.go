@@ -1,9 +1,10 @@
 package main
 
 import (
+	"bufio"
 	"context"
 	"fmt"
-	"time"
+	"os"
 
 	"github.com/blue-script/study_go/postgres"
 )
@@ -24,50 +25,36 @@ func main() {
 		panic(err)
 	}
 
-	review := "Five"
-	timeNow := time.Time{}
+	NEW_USER := os.Getenv("NEW_USER")
+	if NEW_USER == "YES" {
+		reader := bufio.NewReader(os.Stdin)
 
-	if err := postgres.InsertRow(
-		ctx,
-		con,
-		postgres.BookModel{
-			Title:       "Five",
-			Author:      "Five",
-			Review:      &review,
-			ReleaseYear: 1994,
-			IsRead:      true,
-			AddedAt:     timeNow,
-			CompletedAt: &timeNow,
-		}); err != nil {
-		panic(err)
-	}
+		userName, _ := reader.ReadString('\n')
 
-	// for _, book := range books {
-	// 	if book.Id == 3 {
-	// 		review := "where"
-	// 		now := time.Now()
-	// 		book.Title = "where"
-	// 		book.Author = "where"
-	// 		book.Review = &review
-	// 		book.ReleaseYear = 2026
-	// 		book.IsRead = true
-	// 		book.AddedAt = now
-	// 		book.CompletedAt = &now
+		var phoneInput string
+		var phoneNumber *string
+		phoneInput, _ = reader.ReadString('\n')
+		fmt.Println(phoneInput)
+		if phoneInput == "\n" {
+			phoneNumber = nil
+		} else {
+			phoneNumber = &phoneInput
+		}
 
-	// 		if err := postgres.UpdateTask(ctx, con, book); err != nil {
-	// 			panic(err)
-	// 		}
-	// 	}
-	// }
-
-	// ids := []int{1, 2, 3, 4}
-	// if err := postgres.DeleteBooks(ctx, con, ids); err != nil {
-	// 	panic(err)
-	// }
-
-	err = postgres.ListPage(ctx, con, 5)
-	if err != nil {
-		panic(err)
+		user := postgres.UserModel{
+			FullName:    userName,
+			PhoneNumber: phoneNumber,
+		}
+		if err := postgres.InsertRow(ctx, con, user); err != nil {
+			fmt.Println(err)
+		}
+		fmt.Println("User successful add")
+	} else if NEW_USER == "NO" {
+		if err := postgres.ListPage(ctx, con); err != nil {
+			fmt.Println("Error read table user")
+		}
+	} else {
+		fmt.Println("Incorrect NEW_USER")
 	}
 
 	fmt.Println("Success")

@@ -9,7 +9,7 @@ import (
 )
 
 func CreateConnection(ctx context.Context) (*pgx.Conn, error) {
-	postgres_connect := os.Getenv("postgres_connect")
+	postgres_connect := os.Getenv("CONN_STRING")
 	if postgres_connect == "" {
 		fmt.Println("Can't connect")
 	} else {
