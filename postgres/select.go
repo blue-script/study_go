@@ -6,12 +6,10 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func SelectRows(ctx context.Context, con *pgx.Conn) ([]BookModel, error) {
+func SelectRows(ctx context.Context, con *pgx.Conn) ([]EmployeeModel, error) {
 	sqlQuery := `
-		SELECT id, title, author, review, release_year, is_read, added_at, completed_at
-		FROM books
-		LIMIT 5
-		OFFSET 11
+		SELECT id, full_name, position
+		FROM employees
 	`
 
 	rows, err := con.Query(ctx, sqlQuery)
@@ -20,28 +18,23 @@ func SelectRows(ctx context.Context, con *pgx.Conn) ([]BookModel, error) {
 	}
 	defer rows.Close()
 
-	books := make([]BookModel, 0)
+	employees := make([]EmployeeModel, 0)
 
 	for rows.Next() {
-		var book BookModel
+		var employee EmployeeModel
 
 		err := rows.Scan(
-			&book.ID,
-			&book.Title,
-			&book.Author,
-			&book.Review,
-			&book.ReleaseYear,
-			&book.IsRead,
-			&book.AddedAt,
-			&book.CompletedAt,
+			&employee.ID,
+			&employee.FullName,
+			&employee.Position,
 		)
 
 		if err != nil {
 			return nil, err
 		}
 
-		books = append(books, book)
+		employees = append(employees, employee)
 	}
 
-	return books, nil
+	return employees, nil
 }
