@@ -2,20 +2,25 @@ package postgres
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/jackc/pgx/v5"
 )
 
-func InsertRow(ctx context.Context, con *pgx.Conn, user UserModel) error {
+func InsertRow(ctx context.Context, con *pgx.Conn, employee EmployeeModel) error {
 	sqlQuery := `
-		INSERT INTO users(full_name, phone_number)
+		INSERT INTO employees(full_name, position)
 		VALUES($1, $2)
 	`
+
+	fmt.Println(employee)
+	fmt.Println(employee.FullName)
+	fmt.Println(employee.Position)
 	_, err := con.Exec(
 		ctx,
 		sqlQuery,
-		user.FullName,
-		user.PhoneNumber,
+		employee.FullName,
+		employee.Position,
 	)
 
 	return err

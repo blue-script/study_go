@@ -1,0 +1,12 @@
+FROM golang:1.26.2-bookworm
+
+WORKDIR /app
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+RUN go build -o exe .
+
+CMD ["/app/exe"]

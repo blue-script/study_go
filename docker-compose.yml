@@ -1,0 +1,35 @@
+services:
+  postgres:
+    image: postgres:18.3-bookworm
+    container_name: study-postgres
+    restart: always
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./postgres-data:/var/lib/postgresql
+    networks:
+      - study-network
+
+  app:
+    build: .
+    image: study-go
+    depends_on:
+      - postgres
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT}
+    networks:
+      - study-network
+
+networks:
+  study-network:
+    driver: bridge
